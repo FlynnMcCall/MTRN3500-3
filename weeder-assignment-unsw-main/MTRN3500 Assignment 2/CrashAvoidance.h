@@ -24,7 +24,7 @@ public:
         SM_VehicleControl_ = SM_VehicleControl;
         dataX = gcnew array<double>(STANDARD_LASER_LENGTH);
         dataY = gcnew array<double>(STANDARD_LASER_LENGTH);
-        if (d_min > d_throttle) throw gcnew Exception("d_throttle must be larger than d_min");
+        if (d_min >= d_throttle) throw gcnew Exception("d_throttle must be larger than d_min");
     }
 
     void threadFunction() override;
@@ -50,8 +50,8 @@ private:
 
 
     // geometry (mm)
-    double d_min = 300.;
-    double d_throttle = 1000.;
+    double d_min = 300.; // Stop 30cm from target
+    double d_throttle = 1000.; // full speed if no target up to 1m away
 
     double vehicleWidth  = 750.;
     double vehicleLength = 680.; // axel-to-axel length of vehicle
