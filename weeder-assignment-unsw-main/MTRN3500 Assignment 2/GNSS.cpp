@@ -6,6 +6,7 @@ error_state GNSS::communicate() {
 }
 
 error_state GNSS::processSharedMemory() {
+	
 	int len = Stream->Read(ReadData, 0, ReadData->Length);
 	int start = -3;
 	uint32_t head = 0;
@@ -68,10 +69,15 @@ void GNSS::threadFunction() {
 	while (!getShutdownFlag()) {
 		Thread::Sleep(100);
 
-		error_state mem_err = processSharedMemory();
-		if (mem_err != error_state::SUCCESS) return;
+		try {
+			error_state mem_err = processSharedMemory();
+			if (mem_err != error_state::SUCCESS) return;
+			printData();
+		}
+		catch (Exception^) {
+			//Console::WriteLine("Error occurred");
+		}
 
-		printData();
 
 		error_state hb_err = processHeartbeat();
 		if (hb_err != error_state::SUCCESS) return;

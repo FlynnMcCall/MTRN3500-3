@@ -24,6 +24,7 @@ error_state Controller::controllerSetUp() {
 
 	String^ mode = (INPUT_MODE == 0) ? "Xbox" : "keyboard";
 	Console::WriteLine(this->name + "mode {0}", INPUT_MODE);
+	return error_state::SUCCESS;
 }
 
 void Controller::threadFunction() {
@@ -64,7 +65,12 @@ error_state Controller::processSharedMemory() {
 		blankCommands();
 		return error_state::ERR_CONNECTION;
 	}
-
+	if (state.buttonX) {
+		Console::WriteLine(this->name + " x pressed, shutting down...");
+		SM_TM_->shutdown |= 0xFF;
+		blankCommands();
+		return error_state::ERR_CONNECTION;
+	}
 	double Speed = 0;
 	double Steering = 0;
 	double eps = 1e-2;

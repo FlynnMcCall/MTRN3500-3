@@ -25,7 +25,7 @@ public:
     property int port
     {
         int get() override {
-            return VC_PORT;
+            return DISPLAY_PORT;
         }
     }
 

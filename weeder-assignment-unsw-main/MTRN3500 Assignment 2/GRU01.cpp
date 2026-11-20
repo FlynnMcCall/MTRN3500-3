@@ -79,13 +79,15 @@ void GRU01::threadFunction() {
 
 	while (!getShutdownFlag()) {
 		Thread::Sleep(100);
-
-		error_state mem_err = processSharedMemory();
-		if (mem_err != error_state::SUCCESS &&
-			mem_err != error_state::ERR_NO_DATA)
-		{
-			return;
+		try {
+			error_state mem_err = processSharedMemory();
+			if (mem_err != error_state::SUCCESS &&
+				mem_err != error_state::ERR_NO_DATA)
+			{
+				return;
+			}
 		}
+		catch (Exception^) {}
 
 		error_state hb_err = processHeartbeat();
 		if (hb_err != error_state::SUCCESS) return;

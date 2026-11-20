@@ -1,9 +1,10 @@
 #include "Display.h"
+#include <cmath>
 
 error_state Display::communicate() {
-	Stream->Write(dataX, 0, dataX->Length);
+	Stream->Write(dataY, 0, dataX->Length);
 	Thread::Sleep(10);
-	Stream->Write(dataY, 0, dataY->Length);
+	Stream->Write(dataX, 0, dataY->Length);
 	return error_state::SUCCESS;
 }
 
@@ -12,6 +13,10 @@ error_state Display::processSharedMemory() {
 	Buffer::BlockCopy(SM_Laser_->x, 0, dataX, 0, dataX->Length);
 	Buffer::BlockCopy(SM_Laser_->y, 0, dataY, 0, dataY->Length);
 	Monitor::Exit(SM_Laser_->lockObject);
+
+	for (int i = 0; i < STANDARD_LASER_LENGTH; i++) {
+		dataY[i * sizeof(double) +7]^= 0x80;
+	}
 	return error_state::SUCCESS;
 }
 

@@ -29,7 +29,7 @@ error_state LiDAR::processSharedMemory() {
 		return error_state::ERR_INVALID_DATA;
 	}
 
-	Monitor::Enter(SM_Laser_->lockObject);
+
 	int NumPoints = Convert::ToInt32(Fragments[25], 16);
 
 	if (NumPoints != STANDARD_LASER_LENGTH) {
@@ -39,11 +39,22 @@ error_state LiDAR::processSharedMemory() {
 		//throw gcnew Exception(this->name + "Wrong number of points");
 	}
 
-	for (int i = 0; i < STANDARD_LASER_LENGTH; i++) {
-		SM_Laser_->x[i] = ((double)Convert::ToInt32(Fragments[i + 26], 16) * Math::Sin(i * 0.5 * Math::PI / 180.0)) / 1000.;
-		SM_Laser_->y[i] = (-(double)Convert::ToInt32(Fragments[i + 26], 16) * Math::Cos(i * 0.5 * Math::PI / 180.0)) / 1000.;
+	double startAngle = Convert::ToInt32(Fragments[23], 16);
+	double resolution = Convert::ToInt32(Fragments[24], 16) / 10000.;
+
+	try {
+		for (int i = 0; i < STANDARD_LASER_LENGTH; i++) {
+			double range = Convert::ToInt32(Fragments[i + 26], 16);
+			//range = 5000.;
+			double angle = startAngle + (i * resolution) * Math::PI / 180.0;
+			SM_Laser_->x[i] =  range * Math::Sin(angle);// / 1000.;
+			SM_Laser_->y[i] = -range * Math::Cos(angle);
+		}
 	}
-	Monitor::Exit(SM_Laser_->lockObject);
+	finally {
+		Monitor::Exit(SM_Laser_->lockObject);
+	}
+
 	return error_state::SUCCESS;
 }
 void LiDAR::threadFunction() {
@@ -52,16 +63,28 @@ void LiDAR::threadFunction() {
 
 	error_state auth_err = authenticate();
 	if (auth_err != error_state::SUCCESS) return;
-
+	/*
+	String^ cmd = "sRN LMDscandata";
+	SendData = Encoding::ASCII->GetBytes(cmd);
+	Stream->WriteByte(0x02);
+	Stream->Write(SendData, 0, SendData->Length);
+	Stream->WriteByte(0x03);
+	int len = Stream->Read(ReadData, 0, ReadData->Length);
+	String^ response = Encoding::ASCII->GetString(ReadData, 0, len);
+	Console::WriteLine(name + "{0}", response);
+	// */
 	while (!getShutdownFlag()) {
-		error_state comm_err = communicate();
-		if (comm_err != error_state::SUCCESS) return;
+		try {
+			error_state comm_err = communicate();
+			if (comm_err != error_state::SUCCESS) return;
 
-		Thread::Sleep(100);
+			Thread::Sleep(100);
 
-		error_state mem_err = processSharedMemory();
-		if (mem_err != error_state::SUCCESS) return;
-
+			error_state mem_err = processSharedMemory();
+			if (mem_err != error_state::SUCCESS) return;
+		}
+		catch(Exception^) 
+		{}
 		error_state hb_err = processHeartbeat();
 		if (hb_err != error_state::SUCCESS) return;
 	}
