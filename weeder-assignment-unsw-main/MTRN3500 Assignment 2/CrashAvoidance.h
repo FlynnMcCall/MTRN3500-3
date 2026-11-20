@@ -47,18 +47,21 @@ private:
 
     double use_rect_deg = 1.; // degrees at which to use rect instead of rotating detection
 
-    double d_min = 0.3;
-    double d_throttle = 1.0;
 
-    // geometry
-    double vehicleWidth = 0.75;
-    double vehicleLength = 0.68; // axel-to-axel length of vehicle
-    double LidarOffset = 0.2;
+
+    // geometry (mm)
+    double d_min = 300.;
+    double d_throttle = 1000.;
+
+    double vehicleWidth  = 750.;
+    double vehicleLength = 680.; // axel-to-axel length of vehicle
+    double LidarOffset   = 200.;
+
+    double ignoreRange = 100.;
 
     double TargetSteer = 0;
 
     array<double>^ dataX;
     array<double>^ dataY;
 
-    double ignoreRange = 100.0;
 };
