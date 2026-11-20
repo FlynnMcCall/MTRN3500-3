@@ -59,4 +59,6 @@ private:
 
     array<double>^ dataX;
     array<double>^ dataY;
+
+    double ignoreRange = 100.0;
 };
