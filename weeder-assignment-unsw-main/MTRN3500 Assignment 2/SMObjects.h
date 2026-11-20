@@ -88,8 +88,8 @@ ref class SM_GRU01
 {
 public:
     Object^ lockObject;
-    double N_combined;
-    double E_combined;
+    double N_dec;
+    double E_dec;
     double Height;
 
     SM_GRU01() {
@@ -103,8 +103,8 @@ ref class SM_VehicleControl
 public:
     Object^ lockObject;
     double Speed;
-    double Steering;
-    bool freeze = false;
+    double Steering; // deg
+    double throttle = 1.0;
 
     SM_VehicleControl() {
         lockObject = gcnew Object();

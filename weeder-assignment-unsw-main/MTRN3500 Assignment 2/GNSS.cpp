@@ -62,8 +62,21 @@ void GNSS::printData() {
 
 
 void GNSS::threadFunction() {
-	NetworkedModule::CoreLoop(100, false);
-	if (Client != nullptr) Client->Close();
+	error_state setup_err = setUp();
+	if (setup_err != error_state::SUCCESS) return;
+
+	while (!getShutdownFlag()) {
+		Thread::Sleep(100);
+
+		error_state mem_err = processSharedMemory();
+		if (mem_err != error_state::SUCCESS) return;
+
+		printData();
+
+		error_state hb_err = processHeartbeat();
+		if (hb_err != error_state::SUCCESS) return;
+	}
+	Console::WriteLine(this->name + "thread returning");
 }
 
 

@@ -31,7 +31,7 @@ error_state ThreadManagement::setupThreads() {
 			gcnew Controller(SM_TM_, SM_VehicleControl_),
 			gcnew VehicleControl(SM_TM_, SM_VehicleControl_),
 			//gcnew Display(SM_TM_, SM_Laser_),
-			//gcnew CrashAvoidance(SM_TM_, SM_Laser_, SM_VehicleControl_),
+			//gcnew CrashAvoidance(SM_TM_, SM_Laser_,  SM_VehicleControl_),
 	};
 
 	ThreadList = gcnew array<Thread^>(ModuleList->Length);

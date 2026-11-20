@@ -77,13 +77,7 @@
     <ClCompile Include="LiDAR.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="UGVModule.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="VC.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="NetworkedModule.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
