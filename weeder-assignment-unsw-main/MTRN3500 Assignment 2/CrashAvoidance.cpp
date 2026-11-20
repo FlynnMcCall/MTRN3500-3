@@ -65,6 +65,7 @@ double CrashAvoidance::rectCollision() {
 		double Bx = dataX[i] + LidarOffset;
 		double By = dataY[i];
 		// Console::WriteLine(name + "{2}, {0} {1}", Bx, By, i);
+		if (Bx <= 0.0) continue; // skip points behind the vehicle
 		if (By < -vehicleWidth / 2.0 || vehicleWidth  / 2.0 < By) continue;
 		min_dist = Math::Min(Bx, min_dist);
 	
@@ -74,7 +75,7 @@ double CrashAvoidance::rectCollision() {
 
 double CrashAvoidance::rotoCollision() {
 	double min_dist = INFINITY;
-	double R = vehicleLength / Math::Tan(TargetSteer * Math::PI / 180.);
+	double R = Math::Abs(vehicleLength / Math::Tan(TargetSteer * Math::PI / 180.));
 
 	double lowerB = Math::Sqrt(vehicleLength * vehicleLength + (R - vehicleWidth / 2.0) * (R - vehicleWidth / 2.0));
 	double upperB = Math::Sqrt(vehicleLength * vehicleLength + (R + vehicleWidth / 2.0) * (R + vehicleWidth / 2.0));
@@ -90,8 +91,10 @@ double CrashAvoidance::rotoCollision() {
 		double Px = x - (-vehicleLength);
 		double Py = y - (R);
 
+		if (Px <= vehicleLength) continue; // skip if point behind vehicle
+
 		double P_mag = Mag(Px, Py);
-		if (P_mag < lowerB || upperB < P_mag) continue;
+		if (P_mag < lowerB || upperB < P_mag) continue; // skip if out of region
 		
 		double theta = Math::Acos(vehicleLength / P_mag) + Math::Atan2(Py, Px);
 		double dist = theta * P_mag;
