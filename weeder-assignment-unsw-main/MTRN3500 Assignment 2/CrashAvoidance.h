@@ -50,14 +50,14 @@ private:
 
 
     // geometry (mm)
-    double d_min = 300.; // Stop 30cm from target
-    double d_throttle = 1000.; // full speed if no target up to 1m away
+    double d_min = 600.; // Stop 60cm from target
+    double d_throttle = 2000.; // full speed if no target up to 2m away
 
     double vehicleWidth  = 750.;
     double vehicleLength = 680.; // axel-to-axel length of vehicle
     double LidarOffset   = 200.;
 
-    double ignoreRange = 100.;
+    double ignoreRange = 100.; // ignore readings under 10 cm away as noise
 
     double TargetSteer = 0;
 
