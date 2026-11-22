@@ -49,7 +49,11 @@ error_state CrashAvoidance::processSharedMemory() {
 		d_crash = rotoCollision();
 	}
 	double throttle = findThrottle(d_crash);
-	//Console::WriteLine(name + "throttle {0} \t|dcrash {1}", throttle, d_crash);
+	
+	if (d_crash == INFINTIY) Console::WriteLine(name + "No collision predicted \t| Throttling to {0:F2}%", 100.0 * throttle;
+	else Console::WriteLine(name + "Collision in {0:F3}m \t| Throttling to {1:F2}%", (d_crash*1000.), 100.0 * throttle;
+	
+	Console::WriteLine(name + "Collision in {0:F3}m \t| Throttling to ", throttle, d_crash);
 	Monitor::Enter(SM_VehicleControl_->lockObject);
 	SM_VehicleControl_->throttle = throttle;
 	Monitor::Exit(SM_VehicleControl_->lockObject);
