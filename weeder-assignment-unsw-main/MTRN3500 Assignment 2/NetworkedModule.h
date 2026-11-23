@@ -58,8 +58,9 @@ public:
 	virtual error_state communicate() = 0;								// Communicate over TCP connection (includes any error checking required on data)
 
 	~NetworkedModule() {
-		if (Client != nullptr) Client->Close();
 		if (Stream != nullptr) Stream->Close();
+		if (Client != nullptr) Client->Close();
+		
 	}
 protected:
 	TcpClient^ Client;
