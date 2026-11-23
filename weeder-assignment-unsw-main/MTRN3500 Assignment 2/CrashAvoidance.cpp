@@ -1,5 +1,7 @@
 #include "CrashAvoidance.h"
 #include <cmath>
+#define INFINITY 1e20
+
 double Mag(double x, double y) {
 	return Math::Sqrt(x*x + y*y);
 }
@@ -50,8 +52,8 @@ error_state CrashAvoidance::processSharedMemory() {
 	}
 	double throttle = findThrottle(d_crash);
 	
-	if (d_crash == INFINTIY) Console::WriteLine(name + "No collision predicted \t| Throttling to {0:F2}%", 100.0 * throttle;
-	else Console::WriteLine(name + "Collision in {0:F3}m \t| Throttling to {1:F2}%", (d_crash*1000.), 100.0 * throttle;
+	if (d_crash == INFINTIY) Console::WriteLine(name + "No collision predicted \t| Throttling to {0:F2}%", 100.0 * throttle);
+	else Console::WriteLine(name + "Collision in {0:F3}m \t| Throttling to {1:F2}%", (d_crash*1000.), 100.0 * throttle);
 	
 	Console::WriteLine(name + "Collision in {0:F3}m \t| Throttling to ", throttle, d_crash);
 	Monitor::Enter(SM_VehicleControl_->lockObject);
