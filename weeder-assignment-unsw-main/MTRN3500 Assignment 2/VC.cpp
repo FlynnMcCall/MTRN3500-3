@@ -3,7 +3,7 @@
 error_state VehicleControl::communicate() {
 	w_dog = !w_dog;
 	double sendspeed = TargetSpeed;
-	if (0 <= Throttle && Throttle <= 1.0) {
+	if (0 <= Throttle && Throttle <= 1.0 && 0.0 < sendspeed) {
 		sendspeed = TargetSpeed * Throttle;
 	}
 	else {
